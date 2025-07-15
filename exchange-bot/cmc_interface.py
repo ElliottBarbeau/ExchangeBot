@@ -1,0 +1,37 @@
+import json
+import os
+
+from pathlib import Path
+from collections import defaultdict
+from requests import Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = ".env"
+load_dotenv(BASE_DIR / ENV_FILE)
+CMC_API_KEY = os.getenv("CMC_API_KEY")
+PRICE_URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest"
+d = defaultdict(int)
+
+def get_price(coin):
+    parameters = {
+    'symbol': coin
+    }
+    headers = {
+    'Accepts': 'application/json',
+    'X-CMC_PRO_API_KEY': CMC_API_KEY,
+    }
+
+    session = Session()
+    session.headers.update(headers)
+
+    try:
+        response = session.get(PRICE_URL, params=parameters)
+        data = json.loads(response.text)
+        print(data)
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+        print(e)
+
+    price = float(data['data'][coin][0]["quote"]["USD"]["price"])
+    return price
