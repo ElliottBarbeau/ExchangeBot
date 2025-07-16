@@ -6,6 +6,20 @@ from pathlib import Path
 from discord.ext import commands
 from dotenv import load_dotenv
 
+'''
+TODO:
+
+1. Cassandra integration
+2. Join command, adding row in db and granting the user who joined paper money
+3. Sell command to allow users to sell their coins
+4. Portfolio command to display what the user owns
+5. Extra parameter on buy command for either tokens or dollars eg $buy 5 sol token, $buy 500 sol dollar buying 5 sol or $500 worth of sol respectively
+6. Admin commands to manually grant people extra money
+7. Leverage trading support
+
+'''
+
+
 BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = ".env"
 COMMANDS_DIR = "commands"
