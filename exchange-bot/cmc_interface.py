@@ -12,7 +12,6 @@ ENV_FILE = ".env"
 load_dotenv(BASE_DIR / ENV_FILE)
 CMC_API_KEY = os.getenv("CMC_API_KEY")
 PRICE_URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest"
-d = defaultdict(int)
 
 def get_price(coin):
     parameters = {
