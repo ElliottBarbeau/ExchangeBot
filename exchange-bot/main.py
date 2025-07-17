@@ -3,31 +3,31 @@ import os
 import discord
 import asyncio
 
-from cassandra.cluster import Cluster
-from cassandra.query import SimpleStatement
-
 from pathlib import Path
 from discord.ext import commands
 from dotenv import load_dotenv
+from database.table_queries import table_exists
 
 '''
 TODO:
 
-1. Move to VPS so I don't have to use 9GB of ram self-hosting a cassandra docker container
-2. Join command, adding row in db and granting the user who joined paper money
-3. Sell command to allow users to sell their coins
-4. Portfolio command to display what the user owns
-5. Extra parameter on buy command for either tokens or dollars eg $buy 5 sol token, $buy 500 sol dollar buying 5 sol or $500 worth of sol respectively
-6. Admin commands to manually grant people extra money
-7. Leverage trading support
+Add user balance to table
+$Start command for bot to create table so it isn't checking to create table every time the main.py file is launched
+$Join command, adding row in db and granting the user who joined paper money
+$Sell command to allow users to sell their coins
+$Fill command to give the user extra money
+Move to VPS and secure Cassandra
+Portfolio command to display what the user owns
+Extra parameter on buy command for either tokens or dollars eg $buy 5 sol token, $buy 500 sol dollar buying 5 sol or $500 worth of sol respectively
+Admin commands to manually grant people extra money
+Leverage trading support
 
 '''
 
 BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = ".env"
-COMMANDS_DIR = "commands"
 COGS_PACKAGE = "commands"
-COGS_PATH = BASE_DIR / COMMANDS_DIR
+COGS_PATH = BASE_DIR / COGS_PACKAGE
 
 # Load dotenv for discord token
 load_dotenv(BASE_DIR / ENV_FILE)
@@ -35,29 +35,6 @@ load_dotenv(BASE_DIR / ENV_FILE)
 TOKEN = os.getenv("DISCORD_TOKEN")
 if TOKEN is None:
     raise RuntimeError("DISCORD_TOKEN not found in env file.")
-
-# Cassandra Setup
-cluster = Cluster(["127.0.0.1"], port=9042)
-session = cluster.connect()
-
-# Create keyspace and table if they don’t exist
-session.execute("""
-    CREATE KEYSPACE IF NOT EXISTS exchangebot
-    WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}
-""")
-
-session.set_keyspace('exchangebot')
-
-session.execute("""
-    CREATE TABLE IF NOT EXISTS user_portfolio (
-        user_id text,
-        symbol text,
-        amount double,
-        avg_price double,
-        last_updated timestamp,
-        PRIMARY KEY (user_id, symbol)
-    )
-""")
 
 # Initialize logging
 logging.basicConfig(
@@ -112,7 +89,7 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     await ctx.reply(f"Oops! {error}", mention_author=False)
 
 async def main() -> None:
-    bot.cassandra_session = session
+    bot.initialized = False if not table_exists('exchangebot', 'user_portfolio') else True
     await load_cogs()
     await bot.start(TOKEN)
 

@@ -3,10 +3,6 @@ import json
 import os
 
 from discord.ext import commands
-from collections import defaultdict
-from requests import Session
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-from dotenv import load_dotenv
 from cmc_interface import get_price
 
 class Price(commands.Cog):
