@@ -1,6 +1,10 @@
 import logging
 import os
 import discord
+import asyncio
+
+from cassandra.cluster import Cluster
+from cassandra.query import SimpleStatement
 
 from pathlib import Path
 from discord.ext import commands
@@ -9,7 +13,7 @@ from dotenv import load_dotenv
 '''
 TODO:
 
-1. Cassandra integration
+1. Move to VPS so I don't have to use 9GB of ram self-hosting a cassandra docker container
 2. Join command, adding row in db and granting the user who joined paper money
 3. Sell command to allow users to sell their coins
 4. Portfolio command to display what the user owns
@@ -18,7 +22,6 @@ TODO:
 7. Leverage trading support
 
 '''
-
 
 BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = ".env"
@@ -32,6 +35,29 @@ load_dotenv(BASE_DIR / ENV_FILE)
 TOKEN = os.getenv("DISCORD_TOKEN")
 if TOKEN is None:
     raise RuntimeError("DISCORD_TOKEN not found in env file.")
+
+# Cassandra Setup
+cluster = Cluster(["127.0.0.1"], port=9042)
+session = cluster.connect()
+
+# Create keyspace and table if they don’t exist
+session.execute("""
+    CREATE KEYSPACE IF NOT EXISTS exchangebot
+    WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}
+""")
+
+session.set_keyspace('exchangebot')
+
+session.execute("""
+    CREATE TABLE IF NOT EXISTS user_portfolio (
+        user_id text,
+        symbol text,
+        amount double,
+        avg_price double,
+        last_updated timestamp,
+        PRIMARY KEY (user_id, symbol)
+    )
+""")
 
 # Initialize logging
 logging.basicConfig(
@@ -54,12 +80,12 @@ bot = commands.Bot(
 )
 
 # Cog loader
-def load_cogs():
+async def load_cogs():
     for file in COGS_PATH.iterdir():
         if not file.name.startswith("_") and file.name.endswith(".py"):
             ext = f"{COGS_PACKAGE}.{file.stem}"  # e.g. "commands.buy"
             try:
-                bot.load_extension(ext)
+                await bot.load_extension(ext)
                 logging.info("Loaded extension: %s", ext)
             except commands.ExtensionAlreadyLoaded:
                 logging.warning("Extension %s already loaded", ext)
@@ -67,7 +93,6 @@ def load_cogs():
                 logging.exception("Failed to load %s: %s", ext, exc)
 
 # Global events
-
 @bot.event
 async def on_ready():
     print("All commands:", bot.all_commands.keys())
@@ -79,7 +104,6 @@ async def on_ready():
     )
 
 # Error handling
-
 @bot.event
 async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
@@ -87,9 +111,10 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     logging.error("Error in command %s: %s", ctx.command, error)
     await ctx.reply(f"Oops! {error}", mention_author=False)
 
-def main() -> None:
-    load_cogs()
-    bot.run(TOKEN, reconnect = True)
+async def main() -> None:
+    bot.cassandra_session = session
+    await load_cogs()
+    await bot.start(TOKEN)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -1,35 +1,45 @@
 import logging
-import json
-import os
+import datetime
+import uuid
 
-from pathlib import Path
 from discord.ext import commands
-from collections import defaultdict
-from requests import Request, Session
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-from dotenv import load_dotenv
 from cmc_interface import get_price
 
 class Buy(commands.Cog):
     def __init__(self, bot):
-        BASE_DIR = Path(__file__).resolve().parent.parent
-        ENV_FILE = ".env"
-        load_dotenv(BASE_DIR / ENV_FILE)
-        self.CMC_API_KEY = os.getenv("CMC_API_KEY")
-        self.PRICE_URL = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest"
-        self.d = defaultdict(int)
         self.bot = bot
+        self.session = bot.cassandra_session
     
     @commands.command(name="buy")
-    async def buy_command(self, ctx, coin: str, dollars: float):
+    async def buy_command(self, ctx, symbol: str, amount: float, type: str):
         # TODO:
-        # Hook up to DB to have user profiles
-        coin = coin.upper()
-        amount_purchased = dollars / get_price(coin)
-        self.d[coin] += amount_purchased
+        # Fix formatting, store CQL queries elsewhere
 
-        await ctx.send(f"{coin} purchased, you now have {round(self.d[coin], 2)} {coin}")
+        user_id = str(ctx.author.id)
+        now = datetime.datetime.now()
+        symbol = symbol.upper()
+        amount = amount / get_price(symbol) if type == "dollars" else amount
+        price = get_price(symbol)
+        
+        row = self.session.execute("""
+            SELECT amount, avg_price FROM user_portfolio
+            WHERE user_id = %s AND symbol = %s
+        """, (user_id, symbol)).one()
 
-def setup(bot):
+        if row:
+            new_amount = row.amount + amount
+            new_avg = ((row.amount * row.avg_price) + (amount * price)) / new_amount
+        else:
+            new_amount = amount
+            new_avg = price
+
+        self.session.execute("""
+            INSERT INTO user_portfolio (user_id, symbol, amount, avg_price, last_updated)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, symbol, new_amount, new_avg, now))
+
+        await ctx.send(f"{symbol} purchased, you now have {round(new_amount, 2)} {symbol}")
+
+async def setup(bot):
     logging.info("Running Buy cog setup()")
-    bot.add_cog(Buy(bot))
+    await bot.add_cog(Buy(bot))

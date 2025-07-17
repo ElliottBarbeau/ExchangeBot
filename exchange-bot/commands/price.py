@@ -21,6 +21,6 @@ class Price(commands.Cog):
         price = round(get_price(coin), 2)
         await ctx.send(f"The price of {coin} is {price}")
 
-def setup(bot):
+async def setup(bot):
     logging.info("Running Price cog setup()")
-    bot.add_cog(Price(bot))
+    await bot.add_cog(Price(bot))
