@@ -19,6 +19,7 @@ def get_portfolio(user_id, symbol):
                 SELECT amount, avg_price FROM user_portfolio
                 WHERE user_id = %s AND symbol = %s
             """
+            
     result = session.execute(query, (user_id, symbol))
     row = result.one()
     return row

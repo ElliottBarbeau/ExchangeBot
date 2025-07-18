@@ -7,20 +7,15 @@ from pathlib import Path
 from discord.ext import commands
 from dotenv import load_dotenv
 from database.table_queries import table_exists
+from tasks.liquidation_monitor import start_monitor
 
 '''
 TODO:
 
-Add user balance to table
-$Start command for bot to create table so it isn't checking to create table every time the main.py file is launched
-$Join command, adding row in db and granting the user who joined paper money
-$Sell command to allow users to sell their coins
-$Fill command to give the user extra money
-Move to VPS and secure Cassandra
-Portfolio command to display what the user owns
-Extra parameter on buy command for either tokens or dollars eg $buy 5 sol token, $buy 500 sol dollar buying 5 sol or $500 worth of sol respectively
-Admin commands to manually grant people extra money
+Realized pnl by user
 Leverage trading support
+Move to VPS and secure Cassandra
+Reformat to move all spot commands, leverage commands, utils etc into one place
 
 '''
 
@@ -72,7 +67,8 @@ async def load_cogs():
 # Global events
 @bot.event
 async def on_ready():
-    print("All commands:", bot.all_commands.keys())
+    print("All commands:", sorted(bot.all_commands.keys()))
+    start_monitor(bot)
     logging.info(
         "Logged in as %s (ID: %s). Connected to %d guild(s).",
         bot.user,
@@ -87,6 +83,7 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
         return
     logging.error("Error in command %s: %s", ctx.command, error)
     await ctx.reply(f"Oops! {error}", mention_author=False)
+    
 
 async def main() -> None:
     bot.initialized = False if not table_exists('exchangebot', 'user_portfolio') else True

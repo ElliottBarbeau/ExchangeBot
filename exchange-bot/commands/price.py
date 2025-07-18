@@ -1,9 +1,8 @@
 import logging
-import json
 import os
 
 from discord.ext import commands
-from cmc_interface import get_price
+from utils.cmc_utils import get_price
 
 class Price(commands.Cog):
     def __init__(self, bot):

@@ -7,12 +7,12 @@ from utils.cmc_utils import get_price
 from database.portfolio_queries import get_portfolio, update_portfolio
 from database.balance_queries import get_balance, update_balance
 
-class Buy(commands.Cog):
+class Sell(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name="buy")
-    async def buy_command(self, ctx, symbol: str, amount: str):
+    @commands.command(name="sell")
+    async def sell_command(self, ctx, symbol: str, amount: str):
         if not self.bot.initialized:
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
@@ -38,27 +38,23 @@ class Buy(commands.Cog):
             except ValueError:
                 await ctx.send("Invalid token amount format.")
                 return
-
+            
+        row = get_portfolio(user_id, symbol)
         user_balance = get_balance(user_id)
 
-        if not user_balance or user_balance < total_price:
-            await ctx.send("Not enough balance to execute this trade. $join to join the game, or $fill to get extra money!")
+        if not row or row.amount < token_amount:
+            await ctx.send(f"You don't have enough {symbol} to sell!")
             return
         
-        row = get_portfolio(user_id, symbol)
-        if row:
-            new_amount = row.amount + token_amount
-            new_avg = ((row.amount * row.avg_price) + (token_amount * price_per_token)) / new_amount
-        else:
-            new_amount = token_amount
-            new_avg = price_per_token
+        new_amount = row.amount - token_amount
+        
+        update_portfolio(user_id, symbol, new_amount, row.avg_price, now)
+        update_balance(user_id, user_balance + total_price)
 
-        update_portfolio(user_id, symbol, new_amount, new_avg, now)
-        update_balance(user_id, user_balance - total_price)
+        new_balance = get_balance(user_id)
 
-        await ctx.send(f"{token_amount:,.4f} {symbol} purchased, you now have {new_amount:,.4f} {symbol}")
-            
+        await ctx.send(f"{token_amount:,.4f} {symbol} sold. Your new balance is {new_balance:,.4f}")
 
 async def setup(bot):
-    logging.info("Running Buy cog setup()")
-    await bot.add_cog(Buy(bot))
+    logging.info("Running Sell cog setup()")
+    await bot.add_cog(Sell(bot))

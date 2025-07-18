@@ -17,6 +17,7 @@ def get_balance(user_id) -> float:
             SELECT balance FROM user_balance
             WHERE user_id = %s
         """
+    
     result = session.execute(query, (user_id,))
     row = result.one()
     return row.balance if row else None

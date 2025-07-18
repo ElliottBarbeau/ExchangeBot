@@ -28,7 +28,6 @@ def get_price(coin):
     try:
         response = session.get(PRICE_URL, params=parameters)
         data = json.loads(response.text)
-        print(data)
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
