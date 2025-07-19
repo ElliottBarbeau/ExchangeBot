@@ -38,3 +38,11 @@ def create_user_pnl(user_id, starting_pnl=0) -> None:
         """
     
     session.execute(query, (user_id, starting_pnl, datetime.now()))
+
+def get_pnl_leaderboard(limit):
+    query = "SELECT user_id, pnl FROM user_pnl"
+    rows = session.execute(query)
+
+    pnl_list = [(row.user_id, row.pnl) for row in rows]
+    pnl_list.sort(key = lambda x: x[1], reverse = True)
+    return pnl_list[:limit]
