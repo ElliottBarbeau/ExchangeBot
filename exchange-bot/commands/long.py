@@ -51,14 +51,25 @@ class Long(commands.Cog):
             combined_amount = existing.amount + token_amount
             new_entry = ((existing.entry_price * existing.amount) + (price * token_amount)) / combined_amount
 
-            new_notional = combined_amount * price
-            old_margin = (existing.entry_price * existing.amount) / existing.leverage
-            new_margin = (price * token_amount) / leverage
+            old_margin = existing.entry_price * existing.amount
+            new_margin = price * token_amount
             total_margin = old_margin + new_margin
 
-            new_leverage = new_notional / total_margin
+            old_notional = existing.entry_price * existing.amount * existing.leverage
+            new_notional = price * token_amount * leverage
+            combined_notional = old_notional + new_notional
+
+            new_leverage = combined_notional / total_margin
+
             maintenance_margin_ratio = get_maintenance_margin_ratio(new_leverage)
-            new_liq = calculate_liquidation_price_long(new_entry, new_leverage, maintenance_margin_ratio)
+
+            new_liq = calculate_liquidation_price_long(
+                entry_price=new_entry,
+                margin=total_margin,
+                amount=combined_amount,
+                leverage=new_leverage,
+                maintenance_margin_ratio=maintenance_margin_ratio
+            )
 
             update_position(
                 user_id=user_id,
@@ -70,13 +81,21 @@ class Long(commands.Cog):
             )
 
             await ctx.send(f"Added to existing LONG position on {symbol.upper()}.\n"
-                           f"New Size: {combined_amount * leverage:,.4f} (Notional) @ Avg ${new_entry:,.2f}\n"
+                           f"New Size: {combined_amount * new_leverage:,.4f} {symbol} (Notional) @ Avg ${new_entry:,.2f}\n"
                            f"New Liquidation Price: ${new_liq:,.2f}")
             
         else:
             
             maintenance_margin_ratio = get_maintenance_margin_ratio(leverage)
-            liq_price = calculate_liquidation_price_long(price, leverage, maintenance_margin_ratio)
+            margin = price * token_amount
+
+            liq_price = calculate_liquidation_price_long(
+                entry_price=price,
+                margin=margin,
+                amount=token_amount,
+                leverage=leverage,
+                maintenance_margin_ratio=maintenance_margin_ratio
+            )
 
             open_position(
                 user_id=user_id,

@@ -12,8 +12,12 @@ def get_maintenance_margin_ratio(leverage: float) -> float:
     else:
         return 0.20
     
-def calculate_liquidation_price_long(entry_price, leverage, maintenance_margin_ratio):
-    return entry_price * (1 - (1 / leverage) + maintenance_margin_ratio)
+def calculate_liquidation_price_long(entry_price, margin, amount, leverage, maintenance_margin_ratio):
+    numerator = margin * (1 - maintenance_margin_ratio)
+    denominator = amount * leverage
+    return entry_price - (numerator / denominator)
 
-def calculate_liquidation_price_short(entry_price, leverage, maintenance_margin_ratio):
-    return entry_price * (1 + (1 / leverage) - maintenance_margin_ratio)
+def calculate_liquidation_price_short(entry_price, margin, amount, leverage, maintenance_margin_ratio):
+    numerator = margin * (1 - maintenance_margin_ratio)
+    denominator = amount * leverage
+    return entry_price + (numerator / denominator)

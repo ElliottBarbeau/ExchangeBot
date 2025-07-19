@@ -5,7 +5,7 @@ from pathlib import Path
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]
 ENV_FILE = ".env"
 
 load_dotenv(BASE_DIR / ENV_FILE)
