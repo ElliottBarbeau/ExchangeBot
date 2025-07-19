@@ -1,6 +1,5 @@
 from .cassandra_client import session
 from datetime import datetime
-from utils.leverage_utils import calculate_liquidation_price_long, calculate_liquidation_price_short, get_maintenance_margin_ratio
 
 def create_leverage_table():
     query = """

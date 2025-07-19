@@ -3,9 +3,7 @@ from dotenv import load_dotenv
 from discord.ext import tasks
 from discord import Embed
 from database.leverage_queries import get_leverage_portfolio, close_position, get_all_user_ids_with_positions
-from database.balance_queries import get_balance, update_balance
 from utils.cmc_utils import get_price
-from utils.leverage_utils import get_maintenance_margin_ratio, calculate_liquidation_price_long, calculate_liquidation_price_short
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
