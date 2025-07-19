@@ -1,4 +1,6 @@
 import logging
+import discord
+
 from discord.ext import commands
 from database.pnl_queries import get_pnl_leaderboard
 
@@ -18,14 +20,17 @@ class Leaderboard(commands.Cog):
                 await ctx.send("No PnL data available.")
                 return
 
-            embed = commands.Embed(title="PnL Leaderboard", color=0x00ff00)
-            description = ""
-            for rank, (user_id, pnl) in enumerate(leaderboard, start=1):
-                member = ctx.guild.get_member(int(user_id))
-                display_name = member.display_name if member else f"User {user_id}"
-                description += f"**{rank}. {display_name}** — PnL: ${pnl:,.2f}\n"
-
-            embed.description = description
+            embed = discord.Embed(title="PnL Leaderboard", color=0x00ff00)
+            for rank, (user_id, pnl) in enumerate(leaderboard):
+                user = await ctx.bot.fetch_user(int(user_id))
+                username = user.name if user else user_id
+                embed.add_field(
+                    name=f"#{rank + 1} 💠 {username}",
+                    value=(
+                        f"PnL: `{'+' if pnl >= 0 else ''}{pnl:,.2f}`"
+                    ),
+                    inline=False
+                )
             await ctx.send(embed=embed)
 
         except Exception as e:
