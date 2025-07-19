@@ -1,6 +1,6 @@
 import logging
 from discord.ext import commands
-from database.leverage_queries import get_pnl_leaderboard
+from database.pnl_queries import get_pnl_leaderboard
 
 class Leaderboard(commands.Cog):
     def __init__(self, bot):
