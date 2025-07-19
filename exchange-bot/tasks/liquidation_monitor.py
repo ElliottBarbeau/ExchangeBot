@@ -18,20 +18,13 @@ async def monitor_liquidations():
     all_users = get_all_user_ids_with_positions()
 
     for user_id in all_users:
-        balance = get_balance(user_id)
         positions = get_leverage_portfolio(user_id)
 
         for pos in positions:
             current_price = get_price(pos.symbol)
-            maintenance_margin_ratio = get_maintenance_margin_ratio(pos.leverage)
+            liq_price = pos.liquidation_price
 
             if pos.is_long:
-                liq_price = calculate_liquidation_price_long(
-                    pos.entry_price,
-                    pos.leverage,
-                    maintenance_margin_ratio
-                )
-
                 if current_price <= liq_price:
                     close_position(user_id, pos.position_id)
 
@@ -51,11 +44,6 @@ async def monitor_liquidations():
                     print(f"Liquidated LONG position for user {user_id} on {pos.symbol}")
 
             else:
-                liq_price = calculate_liquidation_price_short(
-                    pos.entry_price,
-                    pos.leverage,
-                    maintenance_margin_ratio
-                )
                 if current_price >= liq_price:
                     close_position(user_id, pos.position_id)
 
