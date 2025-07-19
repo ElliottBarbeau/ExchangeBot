@@ -14,7 +14,7 @@ class Fill(commands.Cog):
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
 
-        FILL_AMOUNT = 10000000.0
+        FILL_AMOUNT = 1000000000.0
         user_id = str(ctx.author.id)
         balance = get_balance(user_id)
         if balance:
