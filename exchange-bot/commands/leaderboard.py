@@ -24,7 +24,7 @@ class Leaderboard(commands.Cog):
             for rank, (user_id, pnl) in enumerate(leaderboard):
                 user = await ctx.bot.fetch_user(int(user_id))
                 username = user.name if user else user_id
-                if rank == 1:
+                if rank == 0:
                     embed.add_field(
                         name=f"#{rank + 1} 👑 {username}",
                         value=(
