@@ -24,13 +24,23 @@ class Leaderboard(commands.Cog):
             for rank, (user_id, pnl) in enumerate(leaderboard):
                 user = await ctx.bot.fetch_user(int(user_id))
                 username = user.name if user else user_id
-                embed.add_field(
-                    name=f"#{rank + 1} 💠 {username}",
-                    value=(
-                        f"PnL: `{'+' if pnl >= 0 else ''}{pnl:,.2f}`"
-                    ),
-                    inline=False
-                )
+                if rank == 1:
+                    embed.add_field(
+                        name=f"#{rank + 1} 👑 {username}",
+                        value=(
+                            f"PnL: `{'+' if pnl >= 0 else ''}{pnl:,.2f}`"
+                        ),
+                        inline=False
+                    )
+                else:
+                    embed.add_field(
+                        name=f"#{rank + 1} 🐀 {username}",
+                        value=(
+                            f"PnL: `{'+' if pnl >= 0 else ''}{pnl:,.2f}`"
+                        ),
+                        inline=False
+                    )
+
             await ctx.send(embed=embed)
 
         except Exception as e:
