@@ -111,9 +111,9 @@ class Port(commands.Cog):
         embed.add_field(
             name="Portfolio Summary",
             value=f"Total Value: `${total_value:,.2f}`\n"
-                    f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`"
-                    f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`"
-                    f"Balance: {balance:,.2f}",
+                    f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`\n"
+                    f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`\n"
+                    f"Balance: `{balance:,.2f}`",
             inline=False
         )
 
