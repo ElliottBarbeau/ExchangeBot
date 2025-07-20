@@ -9,8 +9,10 @@ def get_maintenance_margin_ratio(leverage: float) -> float:
         return 0.05
     elif leverage <= 50:
         return 0.10
-    else:
+    elif leverage <= 100:
         return 0.20
+    else:
+        return 0.5
     
 def calculate_liquidation_price_long(entry_price, margin, amount, leverage, maintenance_margin_ratio):
     numerator = margin * (1 - maintenance_margin_ratio)
