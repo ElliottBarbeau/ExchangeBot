@@ -9,7 +9,7 @@ class Leaderboard(commands.Cog):
         self.bot = bot
 
     @commands.command(name="leaderboard")
-    async def leaderboard_command(self, ctx, top: int = 3):
+    async def leaderboard_command(self, ctx, top: int = 10):
         if top <= 0 or top > 50:
             await ctx.send("Please request between 1 and 50 top users.")
             return
