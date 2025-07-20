@@ -4,6 +4,8 @@ import discord
 from discord.ext import commands
 from database.portfolio_queries import get_full_portfolio
 from database.leverage_queries import get_leverage_portfolio
+from database.balance_queries import get_balance
+from database.pnl_queries import get_pnl
 from utils.cmc_utils import get_price
 from collections import defaultdict
 
@@ -33,7 +35,10 @@ class Port(commands.Cog):
 
         prices = defaultdict(float)
         total_positions = 0
-        pnl, total_cost, total_value = 0, 0, 0
+        unrealized_pnl, total_cost, total_value = 0, 0, 0
+        realized_pnl = get_pnl(user_id)
+        balance = get_balance(user_id)
+
         for row in spot_portfolio:
             symbol = row.symbol.upper()
             amount = row.amount
@@ -51,7 +56,7 @@ class Port(commands.Cog):
             total_value += value
             avg_price = row.avg_price
             raw_pnl = value - cost
-            pnl += raw_pnl
+            unrealized_pnl += raw_pnl
 
             embed.add_field(
                 name = f"💠 {symbol}",
@@ -88,7 +93,7 @@ class Port(commands.Cog):
 
             max_loss = -(amount * entry_price)
             raw_pnl = max(raw_pnl, max_loss)
-            pnl += raw_pnl
+            unrealized_pnl += raw_pnl
 
             embed.add_field(
                 name=f"⚡ #{position_id} {symbol} ({direction} {leverage:,.2f}x)",
@@ -101,11 +106,14 @@ class Port(commands.Cog):
             )
             total_positions += 1
 
-        pnl_sign = "📈" if pnl >= 0 else "📉"
+        unrealized_pnl_sign = "📈" if unrealized_pnl >= 0 else "📉"
+        realized_pnl_sign = "📈" if realized_pnl >= 0 else "📉"
         embed.add_field(
             name="Portfolio Summary",
             value=f"Total Value: `${total_value:,.2f}`\n"
-                    f"PnL: {pnl_sign} `${pnl:,.2f}`",
+                    f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`"
+                    f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`"
+                    f"Balance: {balance:,.2f}",
             inline=False
         )
 
