@@ -23,8 +23,10 @@ class Port(commands.Cog):
 
         spot_portfolio = get_full_portfolio(user_id)
         leverage_positions = get_leverage_portfolio(user_id)
+        realized_pnl = get_pnl(user_id)
+        balance = get_balance(user_id)
 
-        if not spot_portfolio and not leverage_positions:
+        if not spot_portfolio and not leverage_positions and not realized_pnl and not balance:
             await ctx.send("Portfolio empty. Use $buy to purchase something first!")
             return
         
@@ -36,8 +38,6 @@ class Port(commands.Cog):
         prices = defaultdict(float)
         total_positions = 0
         unrealized_pnl, total_cost, total_value = 0, 0, 0
-        realized_pnl = get_pnl(user_id)
-        balance = get_balance(user_id)
 
         for row in spot_portfolio:
             symbol = row.symbol.upper()
@@ -113,7 +113,7 @@ class Port(commands.Cog):
             value=f"Total Value: `${total_value:,.2f}`\n"
                     f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`\n"
                     f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`\n"
-                    f"Balance: `{balance:,.2f}`",
+                    f"Balance: `${balance:,.2f}`",
             inline=False
         )
 
