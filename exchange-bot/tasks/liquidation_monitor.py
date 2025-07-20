@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from discord.ext import tasks
 from discord import Embed
 from database.leverage_queries import get_leverage_portfolio, close_position, get_all_user_ids_with_positions
+from database.pnl_queries import update_pnl, get_pnl
 from utils.cmc_utils import get_price
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
@@ -22,9 +23,14 @@ async def monitor_liquidations():
             current_price = get_price(pos.symbol)
             liq_price = pos.liquidation_price
 
+            margin = pos.amount * pos.entry_price
+            pnl = get_pnl(user_id)
+            new_pnl = pnl - margin
+
             if pos.is_long:
                 if current_price <= liq_price:
                     close_position(user_id, pos.position_id)
+                    update_pnl(user_id, new_pnl)
 
                     embed = Embed(
                         title="💥 Liquidation Alert",
@@ -44,6 +50,7 @@ async def monitor_liquidations():
             else:
                 if current_price >= liq_price:
                     close_position(user_id, pos.position_id)
+                    update_pnl(user_id, new_pnl)
 
                     embed = Embed(
                         title="💥 Liquidation Alert",

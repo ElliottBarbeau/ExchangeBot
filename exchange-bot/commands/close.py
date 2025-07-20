@@ -45,7 +45,7 @@ class Close(commands.Cog):
             f"Closed {direction} `{position.symbol}` (ID: `{position_id}`).\n"
             f"Entry: ${entry_price:,.2f} | Exit: ${current_price:,.2f}\n"
             f"PnL: {'+' if pnl >= 0 else ''}${pnl:,.2f} ({pnl_sign})\n"
-            f"Margin returned: ${margin_used:,.2f}\n"
+            f"Margin returned: ${margin_used + pnl:,.2f}\n"
             f"New Balance: ${get_balance(user_id):,.2f}"
         )
 
