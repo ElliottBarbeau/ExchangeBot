@@ -84,8 +84,11 @@ class Port(commands.Cog):
             if not pos.is_long:
                 raw_pnl = -raw_pnl
 
-            pnl += raw_pnl
             total_value += notional_value
+
+            max_loss = -(amount * entry_price)
+            raw_pnl = max(raw_pnl, max_loss)
+            pnl += raw_pnl
 
             embed.add_field(
                 name=f"⚡ #{position_id} {symbol} ({direction} {leverage:,.2f}x)",
@@ -93,7 +96,7 @@ class Port(commands.Cog):
                     f"Entry: `${entry_price:,.2f}`\n"
                     f"Current: `${current_price:,.2f}`\n"
                     f"Liquidation Price: `${liquidation_price:,.2f}`\n"
-                    f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.2f}`",
+                    f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.2f}{' - Liquidation Pending' if raw_pnl == max_loss else ''}`",
                 inline=False
             )
             total_positions += 1
