@@ -12,6 +12,7 @@ CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 
 @tasks.loop(minutes=15)
 async def monitor_liquidations():
+    print("Running liquidation monitor")
     bot = monitor_liquidations.bot
     channel = bot.get_channel(CHANNEL_ID)
     all_users = get_all_user_ids_with_positions()
