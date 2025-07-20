@@ -110,7 +110,7 @@ class Port(commands.Cog):
         realized_pnl_sign = "📈" if realized_pnl >= 0 else "📉"
         embed.add_field(
             name="Portfolio Summary",
-            value=f"Total Value: `${total_value:,.2f}`\n"
+            value=f"Total Position Value: `${total_value:,.2f}`\n"
                     f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`\n"
                     f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`\n"
                     f"Balance: `${balance:,.2f}`",
