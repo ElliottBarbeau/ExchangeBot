@@ -51,7 +51,7 @@ class Long(commands.Cog):
         required_margin = price * token_amount
 
         if balance < required_margin:
-            await ctx.send(f"Not enough balance. You need at least ${required_margin:,.2f} to open this position.")
+            await ctx.send(f"Not enough balance. You need at least ${required_margin:,.4f} to open this position.")
             return
 
         update_balance(user_id, balance - required_margin)
@@ -92,8 +92,8 @@ class Long(commands.Cog):
             )
 
             await ctx.send(f"Added to existing LONG position on {symbol.upper()}.\n"
-                           f"New Size: {combined_amount * new_leverage:,.4f} {symbol} (Notional) @ Avg ${new_entry:,.2f}\n"
-                           f"New Liquidation Price: ${new_liq:,.2f}")
+                           f"New Size: {combined_amount * new_leverage:,.4f} {symbol} (Notional) @ Avg ${new_entry:,.4f}\n"
+                           f"New Liquidation Price: ${new_liq:,.4f}")
             
         else:
             
@@ -118,9 +118,9 @@ class Long(commands.Cog):
                 is_long=True
             )
 
-            await ctx.send(f"Opened LONG with notional size {token_amount * leverage:,.4f} {symbol.upper()} @ ${price:,.2f} "
+            await ctx.send(f"Opened LONG with notional size {token_amount * leverage:,.4f} {symbol.upper()} @ ${price:,.4f} "
                         f"with {leverage}x leverage.\n"
-                        f"Liquidation Price: ${liq_price:,.2f}")
+                        f"Liquidation Price: ${liq_price:,.4f}")
 
 async def setup(bot):
     logging.info("Running Long cog setup()")

@@ -65,10 +65,10 @@ class Port(commands.Cog):
             embed.add_field(
                 name = f"💠 {symbol}",
                 value=f"Amount: `{amount:,.4f}`\n"
-                      f"Avg Price: `${avg_price:,.2f}`\n"
-                      f"Value: `${value:,.2f}`\n"
-                      f"Cost: `${cost:,.2f}`\n"
-                      f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.2f}`",
+                      f"Avg Price: `${avg_price:,.4f}`\n"
+                      f"Value: `${value:,.4f}`\n"
+                      f"Cost: `${cost:,.4f}`\n"
+                      f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.4f}`",
                 inline=False
             )
             total_positions += 1
@@ -102,10 +102,10 @@ class Port(commands.Cog):
             embed.add_field(
                 name=f"⚡ #{position_id} {symbol} ({direction} {leverage:,.2f}x)",
                 value=f"Position Size: `{notional_amount:,.4f}`\n"
-                    f"Entry: `${entry_price:,.2f}`\n"
-                    f"Current: `${current_price:,.2f}`\n"
-                    f"Liquidation Price: `${liquidation_price:,.2f}`\n"
-                    f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.2f}{' - Liquidation Pending' if raw_pnl == max_loss else ''}`",
+                    f"Entry: `${entry_price:,.4f}`\n"
+                    f"Current: `${current_price:,.4f}`\n"
+                    f"Liquidation Price: `${liquidation_price:,.4f}`\n"
+                    f"PnL: `{'+' if raw_pnl >= 0 else ''}{raw_pnl:,.4f}{' - Liquidation Pending' if raw_pnl == max_loss else ''}`",
                 inline=False
             )
             total_positions += 1
@@ -114,10 +114,10 @@ class Port(commands.Cog):
         realized_pnl_sign = "📈" if realized_pnl >= 0 else "📉"
         embed.add_field(
             name="Portfolio Summary",
-            value=f"Total Position Value: `${total_value:,.2f}`\n"
-                    f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.2f}`\n"
-                    f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.2f}`\n"
-                    f"Balance: `${balance:,.2f}`",
+            value=f"Total Position Value: `${total_value:,.4f}`\n"
+                    f"Unrealized PnL: {unrealized_pnl_sign} `${unrealized_pnl:,.4f}`\n"
+                    f"Realized PnL: {realized_pnl_sign} `${realized_pnl:,.4f}`\n"
+                    f"Balance: `${balance:,.4f}`",
             inline=False
         )
 
