@@ -43,6 +43,7 @@ async def connect_allmids():
 
 
 async def get_price(symbol: str):
+    global price_cache
     print(price_cache)
     return float(price_cache.get(symbol.upper()))
 
