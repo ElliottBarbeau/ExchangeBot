@@ -71,8 +71,8 @@ async def load_cogs():
 @bot.event
 async def on_ready():
     print("All commands:", sorted(bot.all_commands.keys()))
-    start_monitor(bot)
     start_price_feed(bot.loop)
+    start_monitor(bot)
     logging.info(
         "Logged in as %s (ID: %s). Connected to %d guild(s).",
         bot.user,
