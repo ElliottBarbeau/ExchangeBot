@@ -11,6 +11,7 @@ from commands.price import get_price
 from tasks.liquidation_monitor import start_monitor
 from utils.hl_utils import start_price_feed
 from utils.error_utils import get_error_message
+from time import sleep
 
 '''
 TODO:
@@ -72,6 +73,7 @@ async def load_cogs():
 async def on_ready():
     print("All commands:", sorted(bot.all_commands.keys()))
     start_price_feed(bot.loop)
+    sleep(5)
     start_monitor(bot)
     logging.info(
         "Logged in as %s (ID: %s). Connected to %d guild(s).",
