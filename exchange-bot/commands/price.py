@@ -14,7 +14,7 @@ class Price(commands.Cog):
     async def price_command(self, ctx, coin: str):
         coin = coin.upper()
         price = await get_price(coin)
-        await ctx.send(f"The price of {coin} is {price:,.2f}")
+        await ctx.send(f"The price of {coin} is {price}")
 
 async def setup(bot):
     logging.info("Running Price cog setup()")
