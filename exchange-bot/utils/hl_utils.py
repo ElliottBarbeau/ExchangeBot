@@ -41,6 +41,7 @@ async def connect_allmids():
 
 
 async def get_price(symbol: str):
+    print(price_cache)
     return price_cache.get(symbol.upper())
 
 
