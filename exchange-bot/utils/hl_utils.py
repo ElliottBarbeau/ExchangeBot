@@ -24,6 +24,7 @@ async def connect_ws():
                 async for message in ws:
                     try:
                         data = json.loads(message)
+                        logging.debug(f"[Hyperliquid] WS message: {data}")
                         if data.get("channel") == "ticker":
                             coin = data.get("coin", "").upper()
                             price = float(data.get("markPx", 0))
