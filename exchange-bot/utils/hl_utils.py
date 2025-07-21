@@ -43,8 +43,8 @@ async def connect_allmids():
 
 
 async def get_price(symbol: str):
-    print("PRICE CACHE:", price_cache['mids'][symbol.upper()])
-    return 0
+    print("PRICE CACHE:", price_cache)
+    return price_cache['mids'][symbol.upper()]
 
 
 def start_price_feed(loop: asyncio.AbstractEventLoop):
