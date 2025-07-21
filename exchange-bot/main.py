@@ -10,6 +10,7 @@ from database.table_queries import table_exists
 from commands.price import get_price
 from tasks.liquidation_monitor import start_monitor
 from utils.hl_utils import start_price_feed
+from utils.error_utils import get_error_message
 
 '''
 TODO:
@@ -84,8 +85,10 @@ async def on_ready():
 async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
         return
+    
+    error_message = get_error_message(ctx.command)
     logging.error("Error in command %s: %s", ctx.command, error)
-    await ctx.reply(f"Oops! {error}", mention_author=False)
+    await ctx.reply(f"Oops! {error_message}", mention_author=False)
     
 
 async def main() -> None:
