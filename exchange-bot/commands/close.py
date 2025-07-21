@@ -3,7 +3,7 @@ from discord.ext import commands
 from database.balance_queries import get_balance, update_balance
 from database.leverage_queries import get_position_by_id, close_position
 from database.pnl_queries import update_pnl, get_pnl
-from utils.cmc_utils import get_price
+from utils.hl_utils import get_price
 
 class Close(commands.Cog):
     def __init__(self, bot):

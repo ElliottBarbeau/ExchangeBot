@@ -2,7 +2,7 @@ import logging
 
 from discord.ext import commands
 from database.balance_queries import create_user_balance, get_balance
-from database.pnl_queries import get_pnl, create_user_pnl
+from database.pnl_queries import create_user_pnl
 
 class Join(commands.Cog):
     def __init__(self, bot):

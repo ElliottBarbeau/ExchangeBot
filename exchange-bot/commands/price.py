@@ -2,7 +2,7 @@ import logging
 import os
 
 from discord.ext import commands
-from utils.cmc_utils import get_price, get_coin_price
+from utils.hl_utils import get_price
 
 class Price(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +13,7 @@ class Price(commands.Cog):
     @commands.command(name="price")
     async def price_command(self, ctx, coin: str):
         coin = coin.upper()
-        price = get_coin_price(coin)
+        price = get_price(coin)
         await ctx.send(f"The price of {coin} is {price:,.2f}")
 
 async def setup(bot):

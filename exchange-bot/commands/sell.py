@@ -3,7 +3,7 @@ import datetime
 import math
 
 from discord.ext import commands
-from utils.cmc_utils import get_price
+from utils.hl_utils import get_price
 
 from database.portfolio_queries import get_portfolio, update_portfolio
 from database.balance_queries import get_balance, update_balance

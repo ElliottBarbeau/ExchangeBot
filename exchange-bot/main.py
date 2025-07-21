@@ -7,7 +7,9 @@ from pathlib import Path
 from discord.ext import commands
 from dotenv import load_dotenv
 from database.table_queries import table_exists
+from commands.price import get_price
 from tasks.liquidation_monitor import start_monitor
+from utils.hl_utils import start_price_feed
 
 '''
 TODO:
@@ -69,6 +71,7 @@ async def load_cogs():
 async def on_ready():
     print("All commands:", sorted(bot.all_commands.keys()))
     start_monitor(bot)
+    start_price_feed(bot.loop)
     logging.info(
         "Logged in as %s (ID: %s). Connected to %d guild(s).",
         bot.user,
@@ -87,6 +90,7 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
 
 async def main() -> None:
     bot.initialized = False if not table_exists('exchangebot', 'user_portfolio') else True
+    bot.prices = {}
     await load_cogs()
     await bot.start(TOKEN)
 

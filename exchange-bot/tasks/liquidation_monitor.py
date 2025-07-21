@@ -4,7 +4,7 @@ from discord.ext import tasks
 from discord import Embed
 from database.leverage_queries import get_leverage_portfolio, close_position, get_all_user_ids_with_positions
 from database.pnl_queries import update_pnl, get_pnl
-from utils.cmc_utils import get_price
+from utils.hl_utils import get_price
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 

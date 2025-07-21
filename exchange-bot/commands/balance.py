@@ -1,7 +1,7 @@
 import logging
 
 from discord.ext import commands
-from database.balance_queries import get_balance, create_user_balance
+from database.balance_queries import get_balance
 
 class Bal(commands.Cog):
     def __init__(self, bot):

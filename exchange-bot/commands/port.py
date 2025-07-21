@@ -6,7 +6,7 @@ from database.portfolio_queries import get_full_portfolio
 from database.leverage_queries import get_leverage_portfolio
 from database.balance_queries import get_balance
 from database.pnl_queries import get_pnl
-from utils.cmc_utils import get_price
+from utils.hl_utils import get_price
 from collections import defaultdict
 
 class Port(commands.Cog):

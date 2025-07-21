@@ -3,7 +3,7 @@ import math
 from discord.ext import commands
 from database.balance_queries import get_balance, update_balance
 from database.leverage_queries import open_position, get_existing_position, update_position
-from utils.cmc_utils import get_price
+from utils.hl_utils import get_price
 from utils.leverage_utils import get_maintenance_margin_ratio, calculate_liquidation_price_short
 
 MAX_LEVERAGE = 100
