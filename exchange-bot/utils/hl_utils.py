@@ -43,7 +43,7 @@ async def connect_allmids():
 
 
 async def get_price(symbol: str):
-    print("PRICE CACHE:", price_cache)
+    print("PRICE CACHE:", price_cache['mids'])
     return 0
 
 
