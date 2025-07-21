@@ -17,6 +17,9 @@ class Buy(commands.Cog):
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
         
+        if amount <= 0:
+            await ctx.send(f"Amount must be greater than 0.")
+        
         user_id = str(ctx.author.id)
         now = datetime.datetime.now()
         symbol = symbol.upper()
