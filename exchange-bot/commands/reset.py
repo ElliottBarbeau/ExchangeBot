@@ -13,7 +13,8 @@ class AdminCommands(commands.Cog):
             "user_portfolio",
             "leverage_portfolio",
             "user_balance",
-            "leverage_position_counters"
+            "leverage_position_counters",
+            "user_pnl"
         ]
 
         try:
