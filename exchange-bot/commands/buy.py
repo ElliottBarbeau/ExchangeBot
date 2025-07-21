@@ -1,5 +1,6 @@
 import logging
 import datetime
+import math
 
 from discord.ext import commands
 from utils.cmc_utils import get_price
@@ -39,8 +40,9 @@ class Buy(commands.Cog):
                 await ctx.send("Invalid token amount format.")
                 return
             
-        if token_amount < 0 or token_amount > 1000000000000000:
+        if token_amount <= 0 or math.isnan(token_amount):
             await ctx.send(f"Amount must be greater than 0.")
+            return
 
         user_balance = get_balance(user_id)
 

@@ -1,4 +1,5 @@
 import logging
+import math
 from discord.ext import commands
 from database.balance_queries import get_balance, update_balance
 from database.leverage_queries import open_position, get_existing_position, update_position
@@ -37,8 +38,9 @@ class Long(commands.Cog):
                 await ctx.send("Invalid token amount format.")
                 return
             
-        if token_amount <= 0 or token_amount == float('nan'):
+        if token_amount <= 0 or math.isnan(token_amount):
             await ctx.send(f"Amount must be greater than 0.")
+            return
 
         required_margin = price * token_amount
 

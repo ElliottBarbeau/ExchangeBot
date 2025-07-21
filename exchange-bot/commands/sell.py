@@ -42,6 +42,7 @@ class Sell(commands.Cog):
             
         if token_amount <= 0 or math.isnan(token_amount):
             await ctx.send(f"Amount must be greater than 0.")
+            return
 
         print('TKN AMOUNT', token_amount)
             
