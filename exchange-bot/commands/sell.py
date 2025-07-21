@@ -39,7 +39,7 @@ class Sell(commands.Cog):
                 await ctx.send("Invalid token amount format.")
                 return
             
-        if token_amount <= 0:
+        if token_amount <= 0 or token_amount == float('nan'):
             await ctx.send(f"Amount must be greater than 0.")
             
         row = get_portfolio(user_id, symbol)
