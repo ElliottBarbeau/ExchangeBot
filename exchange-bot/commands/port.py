@@ -26,6 +26,10 @@ class Port(commands.Cog):
         realized_pnl = get_pnl(user_id)
         balance = get_balance(user_id)
 
+        if not get_balance(user_id):
+            await ctx.send("User has not joined the game. Type $join to get started!")
+            return
+
         if not spot_portfolio and not leverage_positions and not realized_pnl and not balance:
             await ctx.send("Portfolio empty. Use $buy to purchase something first!")
             return

@@ -13,13 +13,13 @@ class Bal(commands.Cog):
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
         
+        if not get_balance(user_id):
+            await ctx.send("User has not joined the game. Type $join to get started!")
+            return
+        
         user_id = str(ctx.author.id)
         balance = get_balance(user_id)
-        if balance:
-            await ctx.send(f"Your balance is ${balance:,.2f}")
-        else:
-            create_user_balance(user_id)
-            await ctx.send("User added with initial balance of $10,000")
+        await ctx.send(f"Your balance is ${balance:,.2f}")
 
 async def setup(bot):
     logging.info("Running Bal cog setup()")

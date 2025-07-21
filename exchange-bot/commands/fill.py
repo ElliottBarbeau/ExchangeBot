@@ -17,6 +17,11 @@ class Fill(commands.Cog):
         FILL_AMOUNT = 10000
         user_id = str(ctx.author.id)
         balance = get_balance(user_id)
+
+        if not balance:
+            await ctx.send("User has not joined the game. Type $join to get started!")
+            return
+        
         if balance:
             new_balance = balance + FILL_AMOUNT
             update_balance(user_id, new_balance)
