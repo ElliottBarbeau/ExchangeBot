@@ -46,7 +46,7 @@ async def subscribe_coin(coin: str):
         try:
             payload = {
                 "method": "subscribe",
-                "subscriptions": [{"type": "Trade", "coin": coin.upper()}]
+                "subscription": [{"type": "trades", "coin": coin.upper()}]
             }
             await ws_conn.send(json.dumps(payload))
             subscribed_coins.add(coin.upper())
