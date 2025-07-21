@@ -30,12 +30,8 @@ async def connect_allmids():
 
                         if data.get("channel") == "allMids":
                             mids = data.get("data", {})
-                            for coin, price in mids.items():
-                                try:
-                                    price_cache[coin.upper()] = float(price)
-                                except (ValueError, TypeError):
-                                    logging.warning(f"[Hyperliquid] Invalid price for {coin}: {price}")
-                            logging.debug(f"[Hyperliquid] Updated {len(mids)} prices")
+                            price_cache = mids
+                            
                     except Exception as e:
                         logging.error(f"[Hyperliquid] Error parsing WebSocket message: {e}")
 
