@@ -19,14 +19,15 @@ class Long(commands.Cog):
             return
 
         user_id = str(ctx.author.id)
+        balance = get_balance(user_id)
 
-        if not get_balance(user_id):
+        if balance is None:
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
         
         symbol = symbol.upper()
         price = await get_price(symbol)
-        balance = get_balance(user_id)
+        
 
         # If amount starts with '$' => dollar amount
         if amount.startswith('$'):

@@ -13,10 +13,11 @@ class Join(commands.Cog):
         if not self.bot.initialized:
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
+        
         user_id = str(ctx.author.id)
         balance = get_balance(user_id)
 
-        if not balance:
+        if balance is None:
             create_user_balance(user_id)
             create_user_pnl(user_id)
             await ctx.send("User added with initial balance of $10,000")

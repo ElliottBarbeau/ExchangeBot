@@ -19,8 +19,9 @@ class Sell(commands.Cog):
             return
         
         user_id = str(ctx.author.id)
+        user_balance = get_balance(user_id)
 
-        if not get_balance(user_id):
+        if user_balance is None:
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
         
@@ -50,7 +51,6 @@ class Sell(commands.Cog):
             return
             
         row = get_portfolio(user_id, symbol)
-        user_balance = get_balance(user_id)
 
         if not row or row.amount < token_amount:
             await ctx.send(f"You don't have enough {symbol} to sell!")

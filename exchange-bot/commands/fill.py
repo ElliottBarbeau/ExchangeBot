@@ -18,7 +18,7 @@ class Fill(commands.Cog):
         user_id = str(ctx.author.id)
         balance = get_balance(user_id)
 
-        if not balance:
+        if balance is None:
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
         

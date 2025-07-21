@@ -19,8 +19,9 @@ class Buy(commands.Cog):
             return
         
         user_id = str(ctx.author.id)
+        user_balance = get_balance(user_id)
 
-        if not get_balance(user_id):
+        if user_balance is None:
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
 
@@ -48,8 +49,6 @@ class Buy(commands.Cog):
         if token_amount <= 0 or math.isnan(token_amount):
             await ctx.send(f"Amount must be greater than 0.")
             return
-
-        user_balance = get_balance(user_id)
 
         if not user_balance or user_balance < total_price:
             await ctx.send("Not enough balance to execute this trade. $join to join the game, or $fill to get extra money!")
