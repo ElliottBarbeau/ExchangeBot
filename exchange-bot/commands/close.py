@@ -31,11 +31,13 @@ class Close(commands.Cog):
         else:
             pnl = (entry_price - current_price) * amount * leverage
 
+        if pnl < 0:
+            pnl = max(pnl, -margin_used)
+        
         balance = get_balance(user_id)
         old_pnl = get_pnl(user_id)
         update_balance(user_id, balance + margin_used + pnl)
         update_pnl(user_id, old_pnl + pnl)
-
         close_position(user_id, position_id)
 
         direction = "LONG" if is_long else "SHORT"
