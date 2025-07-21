@@ -22,6 +22,8 @@ async def monitor_liquidations():
 
         for pos in positions:
             current_price = await get_price(pos.symbol)
+            if current_price is None:
+                return "Price cache not initialized"
             liq_price = pos.liquidation_price
 
             margin = pos.amount * pos.entry_price
