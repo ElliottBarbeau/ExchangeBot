@@ -73,7 +73,7 @@ async def load_cogs():
 async def on_ready():
     print("All commands:", sorted(bot.all_commands.keys()))
     start_price_feed(bot.loop)
-    sleep(5)
+    sleep(1000)
     start_monitor(bot)
     logging.info(
         "Logged in as %s (ID: %s). Connected to %d guild(s).",
