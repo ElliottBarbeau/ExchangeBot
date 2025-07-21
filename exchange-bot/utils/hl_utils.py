@@ -11,6 +11,8 @@ price_cache = {}
 WS_URL = "wss://api.hyperliquid.xyz/ws"
 
 async def connect_allmids():
+    global price_cache
+    
     while True:
         try:
             async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20) as ws:
