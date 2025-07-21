@@ -45,6 +45,7 @@ async def connect_allmids():
 
 
 async def get_price(symbol: str):
+    logging.INFO(f"price: {price_cache}")
     return price_cache.get(symbol.upper())
 
 
