@@ -6,7 +6,7 @@ from database.leverage_queries import open_position, get_existing_position, upda
 from utils.leverage_utils import get_maintenance_margin_ratio, calculate_liquidation_price_long
 from utils.cmc_utils import get_price
 
-MAX_LEVERAGE = 1000
+MAX_LEVERAGE = 100
 
 class Long(commands.Cog):
     def __init__(self, bot):
@@ -18,8 +18,13 @@ class Long(commands.Cog):
             await ctx.send(f"Leverage must be between 1 and {MAX_LEVERAGE}x.")
             return
 
-        symbol = symbol.upper()
         user_id = str(ctx.author.id)
+
+        if not get_balance(user_id):
+            await ctx.send("User has not joined the game. Type $join to get started!")
+            return
+        
+        symbol = symbol.upper()
         price = get_price(symbol)
         balance = get_balance(user_id)
 

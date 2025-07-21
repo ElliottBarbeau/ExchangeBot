@@ -19,6 +19,11 @@ class Buy(commands.Cog):
             return
         
         user_id = str(ctx.author.id)
+
+        if not get_balance(user_id):
+            await ctx.send("User has not joined the game. Type $join to get started!")
+            return
+
         now = datetime.datetime.now()
         symbol = symbol.upper()
         price_per_token = get_price(symbol)
