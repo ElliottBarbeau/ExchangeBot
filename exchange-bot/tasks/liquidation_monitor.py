@@ -10,7 +10,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 
-@tasks.loop(seconds=5)
+@tasks.loop(seconds=3)
 async def monitor_liquidations():
     print("Running liquidation monitor")
     bot = monitor_liquidations.bot
