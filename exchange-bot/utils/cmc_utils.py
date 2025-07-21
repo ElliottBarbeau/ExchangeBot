@@ -6,6 +6,7 @@ from collections import defaultdict
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from dotenv import load_dotenv
+from hyperliquid import HyperliquidSync
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_FILE = ".env"
@@ -33,3 +34,14 @@ def get_price(coin):
 
     price = float(data['data'][coin][0]["quote"]["USD"]["price"])
     return price
+
+def get_coin_price(symbol="BTC/USDC:USDC"):
+    symbol = symbol.upper()
+    symbol += "/USDC:USDC"
+    
+    ex = HyperliquidSync({})
+    ticker = ex.fetch_ticker(symbol)
+    return float(ticker['last'])
+
+if __name__ == "__main__":
+    print("BTC price on Hyperliquid:", get_coin_price())
