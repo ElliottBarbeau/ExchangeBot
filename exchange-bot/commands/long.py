@@ -16,9 +16,6 @@ class Long(commands.Cog):
         if leverage <= 0 or leverage > MAX_LEVERAGE:
             await ctx.send(f"Leverage must be between 1 and {MAX_LEVERAGE}x.")
             return
-        
-        if amount <= 0:
-            await ctx.send(f"Amount must be greater than 0.")
 
         symbol = symbol.upper()
         user_id = str(ctx.author.id)
@@ -39,6 +36,9 @@ class Long(commands.Cog):
             except ValueError:
                 await ctx.send("Invalid token amount format.")
                 return
+            
+        if amount <= 0:
+            await ctx.send(f"Amount must be greater than 0.")
 
         required_margin = price * token_amount
 
