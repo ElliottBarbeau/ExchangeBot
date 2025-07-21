@@ -9,6 +9,7 @@ class Bal(commands.Cog):
     
     @commands.command(name="bal")
     async def balance_command(self, ctx):
+        user_id = str(ctx.author.id)
         if not self.bot.initialized:
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
@@ -17,7 +18,6 @@ class Bal(commands.Cog):
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
         
-        user_id = str(ctx.author.id)
         balance = get_balance(user_id)
         await ctx.send(f"Your balance is ${balance:,.2f}")
 
