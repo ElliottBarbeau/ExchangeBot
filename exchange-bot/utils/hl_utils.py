@@ -12,7 +12,7 @@ WS_URL = "wss://api.hyperliquid.xyz/ws"
 
 async def connect_allmids():
     global price_cache
-    
+
     while True:
         try:
             async with websockets.connect(WS_URL, ping_interval=20, ping_timeout=20) as ws:
@@ -44,7 +44,7 @@ async def connect_allmids():
 
 async def get_price(symbol: str):
     print(price_cache)
-    return price_cache.get(symbol.upper())
+    return float(price_cache.get(symbol.upper()))
 
 
 def start_price_feed(loop: asyncio.AbstractEventLoop):
