@@ -86,8 +86,8 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError):
     if isinstance(error, commands.CommandNotFound):
         return
     
-    error_message = get_error_message(ctx.command)
-    logging.error("Error in command %s: %s", ctx.command, error)
+    error_message = get_error_message(ctx.command.cog_name)
+    logging.error("Error in command %s: %s", ctx.command.cog_name, error)
     await ctx.reply(f"Oops! {error_message}", mention_author=False)
     
 
