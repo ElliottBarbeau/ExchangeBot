@@ -26,7 +26,7 @@ class Port(commands.Cog):
         realized_pnl = get_pnl(user_id)
         balance = get_balance(user_id)
 
-        if not get_balance(user_id):
+        if balance is None:
             await ctx.send("User has not joined the game. Type $join to get started!")
             return
 
