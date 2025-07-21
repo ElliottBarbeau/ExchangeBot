@@ -25,7 +25,7 @@ class Long(commands.Cog):
             return
         
         symbol = symbol.upper()
-        price = get_price(symbol)
+        price = await get_price(symbol)
         balance = get_balance(user_id)
 
         # If amount starts with '$' => dollar amount

@@ -26,7 +26,7 @@ class Buy(commands.Cog):
 
         now = datetime.datetime.now()
         symbol = symbol.upper()
-        price_per_token = get_price(symbol)
+        price_per_token = await get_price(symbol)
         total_price = 0
 
         # If amount starts with '$' => dollar amount

@@ -49,7 +49,7 @@ class Port(commands.Cog):
             cost = row.avg_price * amount
 
             if symbol not in prices:
-                prices[symbol] = get_price(symbol)
+                prices[symbol] = await get_price(symbol)
 
             value = prices[symbol] * amount
 
@@ -81,7 +81,7 @@ class Port(commands.Cog):
             is_long = pos.is_long
             position_id = pos.position_id
             liquidation_price = pos.liquidation_price
-            current_price = get_price(symbol)
+            current_price = await get_price(symbol)
             direction = "LONG" if is_long else "SHORT"
 
             # Notional value - your total position size with leverage

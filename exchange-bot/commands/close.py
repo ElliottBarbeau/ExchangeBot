@@ -18,7 +18,7 @@ class Close(commands.Cog):
             await ctx.send(f"No open position found with ID `{position_id}`.")
             return
 
-        current_price = get_price(position.symbol)
+        current_price = await get_price(position.symbol)
         entry_price = position.entry_price
         amount = position.amount
         leverage = position.leverage

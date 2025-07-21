@@ -21,7 +21,7 @@ async def monitor_liquidations():
         positions = get_leverage_portfolio(user_id)
 
         for pos in positions:
-            current_price = get_price(pos.symbol)
+            current_price = await get_price(pos.symbol)
             liq_price = pos.liquidation_price
 
             margin = pos.amount * pos.entry_price

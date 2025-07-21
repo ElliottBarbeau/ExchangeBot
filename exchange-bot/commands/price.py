@@ -13,7 +13,7 @@ class Price(commands.Cog):
     @commands.command(name="price")
     async def price_command(self, ctx, coin: str):
         coin = coin.upper()
-        price = get_price(coin)
+        price = await get_price(coin)
         await ctx.send(f"The price of {coin} is {price:,.2f}")
 
 async def setup(bot):
