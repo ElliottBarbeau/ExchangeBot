@@ -10,6 +10,10 @@ class Fill(commands.Cog):
     
     @commands.command(name="fill")
     async def fill_command(self, ctx):
+        await ctx.send("Command Disabled")
+        return
+    
+        '''
         if not self.bot.initialized:
             await ctx.send("Bot not initialized. Did you forget to run $start?")
             return
@@ -30,7 +34,7 @@ class Fill(commands.Cog):
             create_user_pnl(user_id)
             create_user_balance(user_id, FILL_AMOUNT)
             await ctx.send(f"User added with initial balance of {FILL_AMOUNT:,.2f}")
-            
+            '''
 
 async def setup(bot):
     logging.info("Running Fill cog setup()")
