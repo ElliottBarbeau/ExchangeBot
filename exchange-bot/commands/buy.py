@@ -39,7 +39,7 @@ class Buy(commands.Cog):
                 await ctx.send("Invalid token amount format.")
                 return
             
-        if amount <= 0:
+        if token_amount <= 0:
             await ctx.send(f"Amount must be greater than 0.")
 
         user_balance = get_balance(user_id)
