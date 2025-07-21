@@ -6,7 +6,7 @@ from database.leverage_queries import open_position, get_existing_position, upda
 from utils.hl_utils import get_price
 from utils.leverage_utils import get_maintenance_margin_ratio, calculate_liquidation_price_short
 
-MAX_LEVERAGE = 1000
+MAX_LEVERAGE = 100
 
 class Short(commands.Cog):
     def __init__(self, bot):
