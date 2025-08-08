@@ -51,7 +51,7 @@ bot = commands.Bot(
     command_prefix = "$",
     intents = intents,
     help_command = commands.MinimalHelpCommand(),
-    activity = discord.Game(name = "with Python 🐍"),
+    activity = discord.Game(name = "with 🦥 in Costa Rica"),
     case_insensitive=True
 )
 
